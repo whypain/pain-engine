@@ -7,6 +7,7 @@ namespace Pain.Physics.Objects
     public class PhysicsObject : MonoBehaviour
     {
         [SerializeField] private float m_mass = 1f;
+        [SerializeField] private PhysVector3 m_gravity;
         [SerializeField] private PhysVector3 m_testForce;
         
         public PhysTransform physTransform { get; private set; }
@@ -23,7 +24,13 @@ namespace Pain.Physics.Objects
 
         private void FixedUpdate()
         {
+            AddAcceleration(m_gravity);
             physTransform.Step(Time.fixedDeltaTime);
+        }
+
+        private void AddAcceleration(PhysVector3 acceleration)
+        {
+            physTransform = physTransform.AddAcceleration(m_gravity);
         }
 
         private void AddForce(PhysVector3 force)
