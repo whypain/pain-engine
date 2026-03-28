@@ -11,7 +11,7 @@ namespace Pain.Physics.Core
         public PhysVector3 acceleration { get; private set; }
 
         public float mass { get; private set; }
-        private float invMass;
+        private float m_invMass;
 
         private Transform m_transform;
 
@@ -22,7 +22,7 @@ namespace Pain.Physics.Core
             acceleration = PhysVector3.zero;
             
             this.mass = mass;
-            invMass = 1 / mass;
+            m_invMass = 1 / mass;
             m_transform = transform;
         }
 
@@ -40,7 +40,7 @@ namespace Pain.Physics.Core
 
         public void Step(float dt)
         {
-            acceleration += force * invMass;
+            acceleration += force * m_invMass;
             
             velocity += acceleration * dt;
             m_transform.position += (Vector3)velocity * dt;
