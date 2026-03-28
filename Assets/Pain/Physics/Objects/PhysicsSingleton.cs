@@ -37,13 +37,14 @@ namespace Pain.Physics.Objects
             
             foreach (PhysicsObject physObj in m_physicsObjectsArray)
             {
-                PhysVector3 newAcceleration = physObj.pTransform.acceleration;
-                PhysVector3 newVelocity = physObj.pTransform.velocity;
-                PhysVector3 force = physObj.pTransform.force;
+                PhysTransform pTransform = physObj.pTransform;
+                PhysVector3 newAcceleration = pTransform.acceleration;
+                PhysVector3 newVelocity = pTransform.velocity;
+                PhysVector3 force = pTransform.force;
                 
                 // calculate force
-                force += physObj.pTransform.acceleration * physObj.pTransform.mass;
-                newAcceleration += force * physObj.pTransform.invMass;
+                force += physObj.pTransform.acceleration * pTransform.mass;
+                newAcceleration += force * pTransform.invMass;
                 
                 // apply gravity
                 if (physObj.UseGravity) newAcceleration += m_gravity;
