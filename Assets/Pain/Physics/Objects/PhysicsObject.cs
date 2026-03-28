@@ -7,6 +7,8 @@ namespace Pain.Physics.Objects
     {
         [SerializeField] private float m_mass = 1f;
         [SerializeField] private PhysVector3 m_forceOnStart;
+        
+        public bool UseGravity = true;
 
         [HideInInspector] public int ID;
         [HideInInspector] public PhysTransform pTransform;

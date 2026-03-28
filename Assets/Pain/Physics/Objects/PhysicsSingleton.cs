@@ -46,7 +46,7 @@ namespace Pain.Physics.Objects
                 newAcceleration += force * physObj.pTransform.invMass;
                 
                 // apply gravity
-                newAcceleration += m_gravity;
+                if (physObj.UseGravity) newAcceleration += m_gravity;
                 
                 // calculate velocity
                 newVelocity += newAcceleration * dt;
