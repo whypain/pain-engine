@@ -1,4 +1,3 @@
-using System;
 using Pain.Physics.Core;
 using UnityEngine;
 
@@ -7,35 +6,30 @@ namespace Pain.Physics.Objects
     public class PhysicsObject : MonoBehaviour
     {
         [SerializeField] private float m_mass = 1f;
-        [SerializeField] private PhysVector3 m_gravity;
-        [SerializeField] private PhysVector3 m_testForce;
-        
-        public PhysTransform physTransform { get; private set; }
+        [SerializeField] private PhysVector3 m_forceOnStart;
+
+        [HideInInspector] public int ID;
+        [HideInInspector] public PhysTransform pTransform;
 
         private void Awake()
         {
-            physTransform = new PhysTransform(m_mass, transform);
+            pTransform = new PhysTransform(m_mass, transform);
         }
 
         private void Start()
         {
-            AddForce(m_testForce);
+            PhysicsSingleton.Instance.Register(this);
+            pTransform.force = m_forceOnStart;
         }
 
-        private void FixedUpdate()
+        private void OnDestroy()
         {
-            AddAcceleration(m_gravity);
-            physTransform.Step(Time.fixedDeltaTime);
+            PhysicsSingleton.Instance.Unregister(ID);
         }
 
-        private void AddAcceleration(PhysVector3 acceleration)
+        public void OnRegister(int id)
         {
-            physTransform = physTransform.AddAcceleration(m_gravity);
-        }
-
-        private void AddForce(PhysVector3 force)
-        {
-            physTransform = physTransform.AddForce(force);
+            ID = id;
         }
     }
 }
