@@ -1,3 +1,4 @@
+using System;
 using Pain.Physics.Objects;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,12 +27,14 @@ namespace Game.Objects
         {
             m_moveAction.Enable();
             m_moveAction.performed += UpdateInput;
+            m_moveAction.canceled += UpdateInput;
         }
 
         private void OnDisable()
         {
             m_moveAction.Disable();
             m_moveAction.performed -= UpdateInput;
+            m_moveAction.canceled -= UpdateInput;
         }
 
         private void FixedUpdate()
@@ -49,6 +52,14 @@ namespace Game.Objects
         private void Move()
         {
             m_playerObj.AddForce(m_input * m_moveForce);
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (!Application.isPlaying) return;
+            
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(m_playerObj.transform.position, m_playerObj.Velocity);
         }
     }
 }
