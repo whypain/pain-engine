@@ -19,7 +19,8 @@ namespace Pain.Physics.Core
         
         public static PhysVector3 one  = new PhysVector3(1f, 1f, 1f);
         public static PhysVector3 zero = new PhysVector3(0f, 0f, 0f);
-
+        
+        #region Operators
         public static implicit operator PhysVector3(Vector3 v)
         {
             return new PhysVector3(v.x, v.y, v.z);
@@ -58,6 +59,19 @@ namespace Pain.Physics.Core
         public static PhysVector3 operator *(PhysVector3 v, float x)
         {
             return new PhysVector3(v.x * x, v.y * x, v.z * x);
+        }
+        #endregion
+
+        public float magnitude => Mathf.Sqrt(x * x + y * y + z * z);
+        public PhysVector3 inversed => new PhysVector3(-x, -y, -z);
+        public PhysVector3 normalized
+        {
+            get
+            {
+                float mag = magnitude;
+                if (mag == 0f) return zero;
+                return new PhysVector3(x / mag, y / mag, z / mag);
+            }
         }
 
         public override string ToString()

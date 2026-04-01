@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pain.Physics.Core;
+using Pain.Physics.Abstract;
 using UnityEngine;
+using Pain.Physics.Core;
 
 namespace Pain.Physics.Objects
 {
@@ -14,6 +16,7 @@ namespace Pain.Physics.Objects
 
         private Dictionary<int, PhysicsObject> m_physicsObjects;
         private PhysicsObject[] m_physicsObjectsArray;
+        private PhysicsComponent[] m_physicsComponents;
 
         private int m_nextId;
 
@@ -27,6 +30,7 @@ namespace Pain.Physics.Objects
             Instance = this;
             
             m_nextId = 0;
+            LoadPhysicsComponent();
             
             Application.targetFrameRate = m_targetFrameRate;
         }
@@ -37,13 +41,19 @@ namespace Pain.Physics.Objects
             
             foreach (PhysicsObject physObj in m_physicsObjectsArray)
             {
+                ForEach(m_physicsComponents, c =>
+                {
+                    PhysicsObject p = c.OnApply(in physObj);
+                    physObj.Copy(p);
+                });
+                
                 PhysTransform pTransform = physObj.pTransform;
                 PhysVector3 newAcceleration = pTransform.acceleration;
                 PhysVector3 newVelocity = pTransform.velocity;
                 PhysVector3 force = pTransform.force;
                 
                 // calculate force
-                force += physObj.pTransform.acceleration * pTransform.mass;
+                // force += physObj.pTransform.acceleration * pTransform.mass;
                 newAcceleration += force * pTransform.invMass;
                 
                 // apply gravity
@@ -76,10 +86,22 @@ namespace Pain.Physics.Objects
         public void Unregister(int id)
         {
             if (m_physicsObjects == null) return;
-            if (!m_physicsObjects.ContainsKey(id)) return;
-            
-            m_physicsObjects.Remove(id);
+            if (!m_physicsObjects.Remove(id)) return;
+
             m_physicsObjectsArray = m_physicsObjects.Values.ToArray();
+        }
+
+        private void LoadPhysicsComponent()
+        {
+            m_physicsComponents = GetComponentsInChildren<PhysicsComponent>(includeInactive: false);
+        }
+
+        private void ForEach<T>(T[] enumerator, Action<T> action)
+        {
+            foreach (T item in enumerator)
+            {
+                action(item);
+            }
         }
     }
 }
