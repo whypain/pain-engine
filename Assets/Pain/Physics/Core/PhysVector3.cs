@@ -35,6 +35,16 @@ namespace Pain.Physics.Core
             return new PhysVector3(a.x + b.x, a.y + b.y, a.z + b.z);
         }
         
+        public static PhysVector3 operator +(PhysVector3 a, Vector3 b)
+        {
+            return new PhysVector3(a.x + b.x, a.y + b.y, a.z + b.z);
+        }
+        
+        public static PhysVector3 operator +(Vector3 a, PhysVector3 b)
+        {
+            return new PhysVector3(a.x + b.x, a.y + b.y, a.z + b.z);
+        }
+        
         public static PhysVector3 operator -(PhysVector3 a, PhysVector3 b)
         {
             return new PhysVector3(a.x - b.x, a.y - b.y, a.z - b.z);

@@ -6,12 +6,10 @@ namespace Pain.Physics.Objects
     public class PhysicsObject : MonoBehaviour
     {
         [SerializeField] private float m_mass = 1f;
-        [SerializeField] private PhysVector3 m_forceOnStart;
-        
         public bool UseGravity = true;
 
-        [HideInInspector] public int ID;
-        [HideInInspector] public PhysTransform pTransform;
+        internal int ID;
+        internal PhysTransform pTransform;
 
         private void Awake()
         {
@@ -21,7 +19,6 @@ namespace Pain.Physics.Objects
         private void Start()
         {
             PhysicsSingleton.Instance.Register(this);
-            pTransform.force = m_forceOnStart;
         }
 
         private void OnDestroy()
@@ -29,7 +26,12 @@ namespace Pain.Physics.Objects
             PhysicsSingleton.Instance.Unregister(ID);
         }
 
-        public void OnRegister(int id)
+        public void AddForce(Vector3 force)
+        {
+            pTransform.force += force;
+        }
+
+        internal void OnRegister(int id)
         {
             ID = id;
         }
