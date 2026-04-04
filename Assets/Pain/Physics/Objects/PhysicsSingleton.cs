@@ -17,6 +17,7 @@ namespace Pain.Physics.Objects
         private Dictionary<int, PhysicsObject> m_physicsObjects;
         private PhysicsObject[] m_physicsObjectsArray;
         private PhysicsComponent[] m_physicsComponents;
+        private PainlyPhysics m_physicsEngine;
 
         private int m_nextId;
 
@@ -30,7 +31,9 @@ namespace Pain.Physics.Objects
             Instance = this;
             
             m_nextId = 0;
+            
             LoadPhysicsComponent();
+            m_physicsEngine = new PainlyPhysics(m_gravity);
             
             Application.targetFrameRate = m_targetFrameRate;
         }
@@ -39,37 +42,7 @@ namespace Pain.Physics.Objects
         {
             float dt = Time.fixedDeltaTime;
             
-            foreach (PhysicsObject physObj in m_physicsObjectsArray)
-            {
-                ForEach(m_physicsComponents, c =>
-                {
-                    PhysicsObject p = c.OnApply(in physObj);
-                    physObj.Copy(p);
-                });
-                
-                PhysTransform pTransform = physObj.pTransform;
-                PhysVector3 newAcceleration = pTransform.acceleration;
-                PhysVector3 newVelocity = pTransform.velocity;
-                PhysVector3 force = pTransform.force;
-                
-                // calculate force
-                // force += physObj.pTransform.acceleration * pTransform.mass;
-                newAcceleration += force * pTransform.invMass;
-                
-                // apply gravity
-                if (physObj.UseGravity) newAcceleration += m_gravity;
-                
-                // calculate velocity
-                newVelocity += newAcceleration * dt;
-                
-                // apply velocity
-                physObj.pTransform.velocity = newVelocity;
-                physObj.transform.position += (Vector3)newVelocity * dt;
-                
-                // clear force and acceleration
-                physObj.pTransform.force = PhysVector3.zero;
-                physObj.pTransform.acceleration = PhysVector3.zero;
-            }
+            ResolveVelocity(dt);
         }
 
         public void Register(PhysicsObject physicsObject)
@@ -89,6 +62,35 @@ namespace Pain.Physics.Objects
             if (!m_physicsObjects.Remove(id)) return;
 
             m_physicsObjectsArray = m_physicsObjects.Values.ToArray();
+        }
+
+        /// <summary>
+        /// resolves and apply transforms for every physics objects based on force
+        /// </summary>
+        /// <param name="dt">delta time</param>
+        private void ResolveVelocity(float dt)
+        {
+            foreach (PhysicsObject physObj in m_physicsObjectsArray)
+            {
+                ForEach(m_physicsComponents, c =>
+                {
+                    PhysicsObject p = c.OnApply(in physObj);
+                    physObj.Copy(p);
+                });
+
+                physObj.pTransform = m_physicsEngine.CalculateVelocity(physObj.pTransform, dt);
+                physObj.transform.position += physObj.pTransform.velocity * dt;
+            }
+        }
+
+        /// <summary>
+        /// broad phase, find objects that might be colliding
+        /// </summary>
+        /// <returns></returns>
+        private PhysicsObject[] FindCollisionCandidates()
+        {
+            // TODO: maybe quadtree
+            return m_physicsObjectsArray;
         }
 
         private void LoadPhysicsComponent()

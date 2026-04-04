@@ -14,13 +14,15 @@ namespace Pain.Physics.Objects
         public float DragCoefficient => m_dragCoefficient;
         public float CrossSectionalArea => m_crossSectionalArea;
         public PhysVector3 Velocity => pTransform.velocity;
+        public PainCollider Collider { get; private set; }
 
         internal int ID;
         internal PhysTransform pTransform;
 
         private void Awake()
         {
-            pTransform = new PhysTransform(m_mass, transform);
+            pTransform = new PhysTransform(m_mass, UseGravity);
+            Collider = GetComponent<PainCollider>();
         }
 
         private void Start()

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Pain.Physics.Core
 {
     [Serializable]
-    public struct PhysVector2
+    public struct PhysVector2 : IEquatable<PhysVector2>
     {
         public float x;
         public float y;
@@ -80,6 +80,21 @@ namespace Pain.Physics.Core
         public override string ToString()
         {
             return $"({x}, {y})";
+        }
+
+        public bool Equals(PhysVector2 other)
+        {
+            return x.Equals(other.x) && y.Equals(other.y);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is PhysVector2 other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(x, y);
         }
     }
 }

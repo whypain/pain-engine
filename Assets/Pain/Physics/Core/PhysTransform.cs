@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace Pain.Physics.Core
 {
@@ -12,13 +11,15 @@ namespace Pain.Physics.Core
 
         public float mass;
         public float invMass;
+        public bool useGravity;
         
-        public PhysTransform(float mass, Transform transform)
+        public PhysTransform(float mass, bool useGravity)
         {
             force = PhysVector3.zero;
             velocity = PhysVector3.zero;
             acceleration = PhysVector3.zero;
             
+            this.useGravity = useGravity;
             this.mass = mass;
             invMass = 1 / mass;
         }
