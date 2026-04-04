@@ -26,5 +26,10 @@ namespace Pain.Physics.Core
             p.force = PhysVector3.zero;
             return p;
         }
+
+        public bool TestCollision()
+        {
+            return true;
+        }
     }
 }

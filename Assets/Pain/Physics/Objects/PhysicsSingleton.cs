@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pain.Physics.Abstract;
 using UnityEngine;
+using Pain.Physics.Abstract;
 using Pain.Physics.Core;
 
 namespace Pain.Physics.Objects
@@ -43,6 +43,32 @@ namespace Pain.Physics.Objects
             float dt = Time.fixedDeltaTime;
             
             ResolveVelocity(dt);
+
+            // PhysicsObject[] collisionCandidate = FindCollisionCandidates();
+            // for (int i = 0; i < collisionCandidate.Length; i++)
+            // {
+            //     PainCollider a = collisionCandidate[i].Collider;
+            //     if (a is null) continue;
+            //     for (int j = i + 1; j < collisionCandidate.Length; j++)
+            //     {
+            //         PainCollider b = collisionCandidate[j].Collider;
+            //         if (b is null) continue;
+            //
+            //         PhysVector2[] normalsA = a.GetEdgeNormals();
+            //         PhysVector2[] normalsB = b.GetEdgeNormals();
+            //         
+            //         PhysVector2[] normals = new PhysVector2[normalsA.Length + normalsB.Length];
+            //         normalsA.CopyTo(normals, 0);
+            //         normalsB.CopyTo(normals, normalsA.Length);
+            //         
+            //         List<PhysVector2> toCheck = new List<PhysVector2>();
+            //         foreach (PhysVector2 normal in normals)
+            //         {
+            //             if (toCheck.Contains(normal * -1) || toCheck.Contains(normal)) continue;
+            //             toCheck.Add(normal);
+            //         }
+            //     }
+            // }
         }
 
         public void Register(PhysicsObject physicsObject)

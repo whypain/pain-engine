@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &270999316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,7 +538,7 @@ MonoBehaviour:
   m_mass: 1
   m_dragCoefficient: 1
   m_crossSectionalArea: 1
-  UseGravity: 1
+  UseGravity: 0
 --- !u!114 &825329833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,7 +672,7 @@ MonoBehaviour:
   m_mass: 1
   m_dragCoefficient: 1
   m_crossSectionalArea: 1
-  UseGravity: 1
+  UseGravity: 0
 --- !u!4 &898710502
 Transform:
   m_ObjectHideFlags: 0
@@ -705,7 +705,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1875072502
 Rigidbody2D:
   serializedVersion: 5
