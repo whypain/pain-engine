@@ -27,7 +27,7 @@ namespace Pain.Physics.Core
             return p;
         }
 
-        public bool TestCollision()
+        public bool TestCollision(ColliderData collA, ColliderData collB)
         {
             return true;
         }
