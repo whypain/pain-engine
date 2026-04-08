@@ -63,6 +63,16 @@ namespace Pain.Physics.Core
         {
             return new PhysVector2(v.x * x, v.y * x);
         }
+        
+        public static PhysVector2 operator *(float x, PhysVector2 v)
+        {
+            return new PhysVector2(v.x * x, v.y * x);
+        }
+        
+        public static float operator *(PhysVector2 a, PhysVector2 b)
+        {
+            return a.x * b.x + a.y * b.y;
+        }
         #endregion
 
         public float magnitude => Mathf.Sqrt(x * x + y * y);

@@ -554,7 +554,7 @@ MonoBehaviour:
   m_offset: {x: 0, y: 0}
   m_drawNormals: 1
   m_points: []
-  m_size: {x: 7.43, y: 5.71, z: 0}
+  m_size: {x: 1, y: 1, z: 0}
 --- !u!4 &825329834
 Transform:
   m_ObjectHideFlags: 0
@@ -564,7 +564,7 @@ Transform:
   m_GameObject: {fileID: 825329831}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.94, y: 2.99, z: 0}
+  m_LocalPosition: {x: -5.4, y: 2.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -636,7 +636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &898710500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -682,7 +682,72 @@ Transform:
   m_GameObject: {fileID: 898710499}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.97, y: -1.34, z: 0}
+  m_LocalPosition: {x: -1.81, y: 6.71, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1127184177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1127184180}
+  - component: {fileID: 1127184179}
+  - component: {fileID: 1127184178}
+  m_Layer: 0
+  m_Name: Box (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1127184178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127184177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5d9dfca5b3bc05438d65f879a74eec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pain.Physics::Pain.Physics.Objects.PhysicsObject
+  m_mass: 1
+  m_dragCoefficient: 1
+  m_crossSectionalArea: 1
+  UseGravity: 0
+--- !u!114 &1127184179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127184177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130764937af143ee8bbe4caa733e9e2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pain.Physics::Pain.Physics.Objects.BoxPainCollider
+  m_offset: {x: 0, y: 0}
+  m_drawNormals: 1
+  m_points: []
+  m_size: {x: 1, y: 1, z: 0}
+--- !u!4 &1127184180
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127184177}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.15, y: 2.22, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -817,6 +882,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2068791024}
   - component: {fileID: 2068791023}
+  - component: {fileID: 2068791025}
   m_Layer: 0
   m_Name: PhysicsSingleton
   m_TagString: Untagged
@@ -856,6 +922,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2068791025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2068791022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5cb323e333c425eaee8b3c2aba34c19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pain.Physics::Pain.Physics.Objects.CollisionDebugger
+  collA: {fileID: 825329833}
+  collB: {fileID: 1127184179}
+  m_nextAction: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -867,4 +948,5 @@ SceneRoots:
   - {fileID: 1875072504}
   - {fileID: 2068791024}
   - {fileID: 825329834}
+  - {fileID: 1127184180}
   - {fileID: 898710502}

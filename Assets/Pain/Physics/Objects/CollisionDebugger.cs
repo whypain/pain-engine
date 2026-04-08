@@ -1,4 +1,3 @@
-using System;
 using Pain.Physics.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -52,10 +51,30 @@ namespace Pain.Physics.Objects
                 Debug.DrawRay(Vector3.zero, normal, Color.blue);
                 
                 // SAT (separating-axis theorem)
+                PhysVector2 d = new PhysVector2(normal.y, -normal.x);
+                Debug.DrawRay(normal, d * 100f, Color.red);
+                Debug.DrawRay(normal, d * -100f, Color.red);
+
+                Gizmos.color = Color.yellow;
+                foreach (var p in dataA.Verts)
+                {
+                    PhysVector2 newP = ProjectToLine(p, normal, d);
+                    Gizmos.DrawWireSphere(newP, 0.1f);
+                }
                 
-                PhysVector2 perpendicular = new PhysVector2(normal.y, -normal.x);
-                Debug.DrawLine(normal - perpendicular, normal + perpendicular, Color.red);
+                Gizmos.color = Color.brown;
+                foreach (var p in dataB.Verts)
+                {
+                    PhysVector2 newP = ProjectToLine(p, normal, d);
+                    Gizmos.DrawWireSphere(newP, 0.1f);
+                }
+                // Debug.DrawLine(normal - d, normal + d, Color.red);
             }
+        }
+
+        private PhysVector2 ProjectToLine(PhysVector2 point, PhysVector2 through, PhysVector2 dir)
+        {
+            return through + (point - through) * dir / (dir * dir) * dir;
         }
 
         private void OnValidate()
