@@ -40,6 +40,12 @@ namespace Pain.Physics.Objects
             pTransform.force += force;
         }
 
+        public bool TryGetCollider(out PainCollider collider)
+        {
+            collider = Collider;
+            return Collider != null;
+        }
+
         internal void OnRegister(int id)
         {
             ID = id;

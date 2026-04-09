@@ -16,7 +16,6 @@ namespace Pain.Physics.Objects
 
         private Dictionary<int, PhysicsObject> m_physicsObjects;
         private PhysicsObject[] m_physicsObjectsArray;
-        private PhysicsComponent[] m_physicsComponents;
         private PainlyPhysics m_physicsEngine;
 
         private int m_nextId;
@@ -32,7 +31,6 @@ namespace Pain.Physics.Objects
             
             m_nextId = 0;
             
-            LoadPhysicsComponent();
             m_physicsEngine = new PainlyPhysics(m_gravity);
             
             Application.targetFrameRate = m_targetFrameRate;
@@ -43,37 +41,7 @@ namespace Pain.Physics.Objects
             float dt = Time.fixedDeltaTime;
             
             ResolveVelocity(dt);
-
-            PhysicsObject[] collisionCandidate = FindCollisionCandidates();
-            List<PainCollider> collisions = new List<PainCollider>();
-            for (int i = 0; i < collisionCandidate.Length; i++)
-            {
-                PainCollider a = collisionCandidate[i].Collider;
-                if (a is null) continue;
-                a.SetIsColliding(false);
-                for (int j = i + 1; j < collisionCandidate.Length; j++)
-                {
-                    PainCollider b = collisionCandidate[j].Collider;
-                    if (b is null) continue;
-                    b.SetIsColliding(false);
-
-                    bool isColliding = m_physicsEngine.IsCollision(a.Data, b.Data);
-                    if (!isColliding) continue;
-                        
-                    if (!collisions.Contains(a)) collisions.Add(a);
-                    if (!collisions.Contains(b)) collisions.Add(b);
-                }
-            }
-            
-            SetCollisions(collisions, true);
-
-            void SetCollisions(List<PainCollider> collisions, bool isColliding)
-            {
-                foreach (var c in collisions)
-                {
-                    c.SetIsColliding(isColliding);
-                }
-            }
+            ResolveCollisions();
         }
 
         public void Register(PhysicsObject physicsObject)
@@ -103,14 +71,40 @@ namespace Pain.Physics.Objects
         {
             foreach (PhysicsObject physObj in m_physicsObjectsArray)
             {
-                ForEach(m_physicsComponents, c =>
-                {
-                    PhysicsObject p = c.OnApply(in physObj);
-                    physObj.Copy(p);
-                });
-
                 physObj.pTransform = m_physicsEngine.CalculateVelocity(physObj.pTransform, dt);
                 physObj.transform.position += physObj.pTransform.velocity * dt;
+            }
+        }
+
+        /// <summary>
+        /// resolves collision that might happen in a frame
+        /// </summary>
+        private void ResolveCollisions()
+        {
+            PhysicsObject[] collisionCandidate = FindCollisionCandidates();
+            HashSet<PainCollider> collisions = new HashSet<PainCollider>();
+            
+            for (int i = 0; i < collisionCandidate.Length; i++)
+            {
+                if (!collisionCandidate[i].TryGetCollider(out PainCollider a)) continue;
+                a.SetIsColliding(false);
+                
+                for (int j = i + 1; j < collisionCandidate.Length; j++)
+                {
+                    if (!collisionCandidate[j].TryGetCollider(out PainCollider b)) continue;
+                    b.SetIsColliding(false);
+
+                    bool isColliding = m_physicsEngine.IsCollision(a.Data, b.Data);
+                    if (!isColliding) continue;
+                        
+                    collisions.Add(a);
+                    collisions.Add(b);
+                }
+            }
+            
+            foreach (var c in collisions)
+            {
+                c.SetIsColliding(true);
             }
         }
 
@@ -122,19 +116,6 @@ namespace Pain.Physics.Objects
         {
             // TODO: maybe quadtree
             return m_physicsObjectsArray;
-        }
-
-        private void LoadPhysicsComponent()
-        {
-            m_physicsComponents = GetComponentsInChildren<PhysicsComponent>(includeInactive: false);
-        }
-
-        private void ForEach<T>(T[] enumerator, Action<T> action)
-        {
-            foreach (T item in enumerator)
-            {
-                action(item);
-            }
         }
     }
 }
