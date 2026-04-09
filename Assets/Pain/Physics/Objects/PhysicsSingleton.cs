@@ -114,7 +114,10 @@ namespace Pain.Physics.Objects
         /// <returns></returns>
         private PhysicsObject[] FindCollisionCandidates()
         {
-            // TODO: maybe quadtree
+            /*
+             TODO: this should return list of possible pairs 
+             TODO: maybe will use quadtree in the future
+             */
             return m_physicsObjectsArray;
         }
     }
