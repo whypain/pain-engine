@@ -1,5 +1,3 @@
-using Pain.Physics.Objects;
-
 namespace Pain.Physics.Core
 {
     public struct ColliderData

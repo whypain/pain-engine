@@ -11,9 +11,21 @@ namespace Pain.Physics.Objects
         [SerializeField] private bool m_drawNormals;
 
         public ColliderData Data => m_data;
-        protected ColliderData m_data;
+        private ColliderData m_data;
+
+        private bool m_isColliding;
         
-        protected abstract void ConstructShape();
+        protected abstract void ConstructShape(ref PhysVector2[] verts);
+
+        private void Awake()
+        {
+            ConstructShape(ref m_data.Verts);
+        }
+
+        private void FixedUpdate()
+        {
+            ConstructShape(ref m_data.Verts);
+        }
 
         private void DrawNormals()
         {
@@ -31,10 +43,34 @@ namespace Pain.Physics.Objects
             }
         }
 
+        private void DrawShape()
+        {
+            PhysVector2[] verts = m_data.Verts;
+            for (int i = 0; i < verts.Length; i++)
+            {
+                Gizmos.DrawLine(verts[i], verts[(i + 1) % verts.Length]);
+            }
+        }
+
+        public void SetIsColliding(bool isColliding)
+        {
+            m_isColliding = isColliding;
+        }
+
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.green;
-            ConstructShape();
+            Gizmos.color = m_isColliding
+                ? Color.red
+                : Color.green;
+
+            ref PhysVector2[] verts = ref m_data.Verts;
+
+            if (!Application.isPlaying)
+            {
+                ConstructShape(ref verts);
+            }
+            
+            DrawShape();
             if (m_drawNormals)
             {
                 Gizmos.color = Color.red;

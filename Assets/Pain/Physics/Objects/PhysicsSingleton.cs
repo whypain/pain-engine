@@ -44,31 +44,36 @@ namespace Pain.Physics.Objects
             
             ResolveVelocity(dt);
 
-            // PhysicsObject[] collisionCandidate = FindCollisionCandidates();
-            // for (int i = 0; i < collisionCandidate.Length; i++)
-            // {
-            //     PainCollider a = collisionCandidate[i].Collider;
-            //     if (a is null) continue;
-            //     for (int j = i + 1; j < collisionCandidate.Length; j++)
-            //     {
-            //         PainCollider b = collisionCandidate[j].Collider;
-            //         if (b is null) continue;
-            //
-            //         PhysVector2[] normalsA = a.GetEdgeNormals();
-            //         PhysVector2[] normalsB = b.GetEdgeNormals();
-            //         
-            //         PhysVector2[] normals = new PhysVector2[normalsA.Length + normalsB.Length];
-            //         normalsA.CopyTo(normals, 0);
-            //         normalsB.CopyTo(normals, normalsA.Length);
-            //         
-            //         List<PhysVector2> toCheck = new List<PhysVector2>();
-            //         foreach (PhysVector2 normal in normals)
-            //         {
-            //             if (toCheck.Contains(normal * -1) || toCheck.Contains(normal)) continue;
-            //             toCheck.Add(normal);
-            //         }
-            //     }
-            // }
+            PhysicsObject[] collisionCandidate = FindCollisionCandidates();
+            List<PainCollider> collisions = new List<PainCollider>();
+            for (int i = 0; i < collisionCandidate.Length; i++)
+            {
+                PainCollider a = collisionCandidate[i].Collider;
+                if (a is null) continue;
+                a.SetIsColliding(false);
+                for (int j = i + 1; j < collisionCandidate.Length; j++)
+                {
+                    PainCollider b = collisionCandidate[j].Collider;
+                    if (b is null) continue;
+                    b.SetIsColliding(false);
+
+                    bool isColliding = m_physicsEngine.IsCollision(a.Data, b.Data);
+                    if (!isColliding) continue;
+                        
+                    if (!collisions.Contains(a)) collisions.Add(a);
+                    if (!collisions.Contains(b)) collisions.Add(b);
+                }
+            }
+            
+            SetCollisions(collisions, true);
+
+            void SetCollisions(List<PainCollider> collisions, bool isColliding)
+            {
+                foreach (var c in collisions)
+                {
+                    c.SetIsColliding(isColliding);
+                }
+            }
         }
 
         public void Register(PhysicsObject physicsObject)

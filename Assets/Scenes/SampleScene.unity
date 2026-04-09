@@ -119,6 +119,73 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &134822100
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 134822103}
+  - component: {fileID: 134822102}
+  - component: {fileID: 134822101}
+  m_Layer: 0
+  m_Name: Polygon (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &134822101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134822100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0640eb111a1b41679262840b0ca958c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pain.Physics::Pain.Physics.Objects.PolyPainCollider
+  m_offset: {x: 0, y: 0}
+  m_drawNormals: 0
+  m_points:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 1.74, y: 1.12}
+--- !u!114 &134822102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134822100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5d9dfca5b3bc05438d65f879a74eec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pain.Physics::Pain.Physics.Objects.PhysicsObject
+  m_mass: 1
+  m_dragCoefficient: 1
+  m_crossSectionalArea: 1
+  UseGravity: 0
+--- !u!4 &134822103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134822100}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.602, y: 1.094, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &270999315
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +537,7 @@ Transform:
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 2.575, y: 3.261, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -522,7 +589,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &825329832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,7 +619,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Pain.Physics::Pain.Physics.Objects.BoxPainCollider
   m_offset: {x: 0, y: 0}
-  m_drawNormals: 1
+  m_drawNormals: 0
   m_points: []
   m_size: {x: 1, y: 1, z: 0}
 --- !u!4 &825329834
@@ -564,7 +631,7 @@ Transform:
   m_GameObject: {fileID: 825329831}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.138, y: -0.009, z: 0}
+  m_LocalPosition: {x: 2.586, y: 1.218, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -650,7 +717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Pain.Physics::Pain.Physics.Objects.PolyPainCollider
   m_offset: {x: 0, y: 0}
-  m_drawNormals: 1
+  m_drawNormals: 0
   m_points:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
@@ -680,7 +747,7 @@ Transform:
   m_GameObject: {fileID: 898710499}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.646, y: -0.687, z: 0}
+  m_LocalPosition: {x: 1.78, y: 1.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -733,7 +800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Pain.Physics::Pain.Physics.Objects.BoxPainCollider
   m_offset: {x: 0, y: 0}
-  m_drawNormals: 1
+  m_drawNormals: 0
   m_points: []
   m_size: {x: 1, y: 1, z: 0}
 --- !u!4 &1127184180
@@ -745,7 +812,7 @@ Transform:
   m_GameObject: {fileID: 1127184177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.07, y: 2.35, z: 0}
+  m_LocalPosition: {x: -2.14, y: 2.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -880,7 +947,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2068791024}
   - component: {fileID: 2068791023}
-  - component: {fileID: 2068791025}
   m_Layer: 0
   m_Name: PhysicsSingleton
   m_TagString: Untagged
@@ -920,21 +986,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2068791025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2068791022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5cb323e333c425eaee8b3c2aba34c19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Pain.Physics::Pain.Physics.Objects.CollisionDebugger
-  collA: {fileID: 898710500}
-  collB: {fileID: 825329833}
-  m_nextAction: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -945,6 +996,7 @@ SceneRoots:
   - {fileID: 270999319}
   - {fileID: 1875072504}
   - {fileID: 2068791024}
-  - {fileID: 825329834}
   - {fileID: 1127184180}
+  - {fileID: 825329834}
   - {fileID: 898710502}
+  - {fileID: 134822103}
