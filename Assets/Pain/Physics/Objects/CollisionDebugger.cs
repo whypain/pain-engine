@@ -1,6 +1,7 @@
 using System.Linq;
 using Pain.Physics.Core;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Pain.Physics.Objects
 {
@@ -9,8 +10,7 @@ namespace Pain.Physics.Objects
         [SerializeField] private PainCollider collA;
         [SerializeField] private PainCollider collB;
 
-        [SerializeField] private bool[] drawThings;
-        // [SerializeField] private bool m_deepLog;
+        [SerializeField] private bool[] drawAxis;
 
         private PainlyPhysics m_physics;
         
@@ -21,56 +21,28 @@ namespace Pain.Physics.Objects
         {
             if (collA == null || collB == null) return;
 
-            if (CollisionCheck(collA.Data, collB.Data))
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(Vector3.zero, 0.5f);
-                return;
-            }
+            Gizmos.color = m_physics.IsCollision(collA.Data, collB.Data, out CollisionContext[] ctx)
+                ? Color.red
+                : Color.green;
             
-            Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(Vector3.zero, 0.5f);
-        }
-
-        private bool CollisionCheck(ColliderData dataA, ColliderData dataB)
-        {
-            bool isColliding = true;
             
-            PhysVector2[] normalsA = PainColliderHelper.GetNormalsPolygon(dataA);
-            PhysVector2[] normalsB = PainColliderHelper.GetNormalsPolygon(dataB);
+            drawAxis ??= new bool[ctx.Length];
             
-            PhysVector2[] normalsAll = new PhysVector2[normalsA.Length + normalsB.Length];
-            normalsA.CopyTo(normalsAll, 0);
-            normalsB.CopyTo(normalsAll, normalsA.Length);
-
-            for (int i = 0; i < normalsAll.Length; i++)
+            for (int i = 0; i < ctx.Length; i++)
             {
-                PhysVector2 normal = normalsAll[i];
-                
-                // SAT (separating-axis theorem)
-                PhysVector2 axisDir = normal;
-
-                ProjectPoints(dataA.Verts, axisDir, out float minA, out float maxA);
-                ProjectPoints(dataB.Verts, axisDir, out float minB, out float maxB);
-                
-                // if (m_deepLog) Debug.Log($"A: ({minA}, {maxA}) | B: ({minB}, {maxB})");
-
-                if (drawThings[i])
-                {
-                    Debug.DrawRay(Vector3.zero, normal, Color.blue);
-                    DrawSomething(axisDir, minA, maxA, minB, maxB);
-                }
-                if (maxA < minB || maxB < minA)
-                {
-                    isColliding = false;
-                }
+                if (drawAxis[i]) DrawAxis(ctx[i]);
             }
-                
-            return isColliding;
         }
 
-        private void DrawSomething(PhysVector2 axisDir, float minA, float maxA, float minB, float maxB)
+        private void DrawAxis(CollisionContext ctx)
         {
+            PhysVector2 axisDir = ctx.AxisDir;
+            float minA = ctx.MinA;
+            float maxA = ctx.MaxA;
+            float minB = ctx.MinB;
+            float maxB = ctx.MaxB;
+            
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(axisDir * minA, 0.05f);
             Gizmos.DrawWireSphere(axisDir * maxA, 0.05f);
@@ -81,19 +53,6 @@ namespace Pain.Physics.Objects
             
             Debug.DrawRay(Vector3.zero, axisDir * 100f, Color.red);
             Debug.DrawRay(Vector3.zero, axisDir * -100f, Color.red);
-        }
-
-        private void ProjectPoints(PhysVector2[] verts, PhysVector2 axisDir, out float min, out float max)
-        {
-            float[] points = new float[verts.Length];
-            for(int i = 0; i < points.Length; i++)
-            {
-                float pointAlongAxis = verts[i] * axisDir;
-                points[i] = pointAlongAxis;
-            }
-
-            min = points.Min();
-            max = points.Max();
         }
 
         private void OnValidate()
