@@ -1,3 +1,4 @@
+using System.Linq;
 using Pain.Physics.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -47,28 +48,43 @@ namespace Pain.Physics.Objects
 
             for (int i = 0; i < normalsAll.Length; i++)
             {
-                PhysVector2 normal = normalsAll[i];
+                PhysVector2 normal = normalsAll[0];
                 Debug.DrawRay(Vector3.zero, normal, Color.blue);
                 
                 // SAT (separating-axis theorem)
-                PhysVector2 d = new PhysVector2(normal.y, -normal.x);
-                Debug.DrawRay(normal, d * 100f, Color.red);
-                Debug.DrawRay(normal, d * -100f, Color.red);
+                PhysVector2 axisDir = new PhysVector2(normal.y, -normal.x).normalized;
+                Debug.DrawRay(normal, axisDir * 100f, Color.red);
+                Debug.DrawRay(normal, axisDir * -100f, Color.red);
 
                 Gizmos.color = Color.yellow;
-                foreach (var p in dataA.Verts)
+
+                float[] pointsA = new float[dataA.Verts.Length];
+                for(int j = 0; j < pointsA.Length; j++)
                 {
-                    PhysVector2 newP = ProjectToLine(p, normal, d);
-                    Gizmos.DrawWireSphere(newP, 0.1f);
+                    float pointAlongAxis = dataA.Verts[j] * axisDir;
+                    pointsA[j] = pointAlongAxis;   
                 }
+
+                PhysVector2 minPointA = axisDir * pointsA.Min();
+                PhysVector2 maxPointA = axisDir * pointsA.Max();
+                
+                Gizmos.DrawWireSphere(minPointA, 0.05f);
+                Gizmos.DrawWireSphere(maxPointA, 0.05f);
+                
                 
                 Gizmos.color = Color.brown;
-                foreach (var p in dataB.Verts)
+                float[] pointsB = new float[dataB.Verts.Length];
+                for(int j = 0; j < pointsB.Length; j++)
                 {
-                    PhysVector2 newP = ProjectToLine(p, normal, d);
-                    Gizmos.DrawWireSphere(newP, 0.1f);
+                    float pointAlongAxis = dataB.Verts[j] * axisDir;
+                    pointsB[j] = pointAlongAxis;
                 }
-                // Debug.DrawLine(normal - d, normal + d, Color.red);
+                
+                PhysVector2 minPointB = axisDir * pointsB.Min();
+                PhysVector2 maxPointB = axisDir * pointsB.Max();
+                
+                Gizmos.DrawWireSphere(minPointB, 0.05f);
+                Gizmos.DrawWireSphere(maxPointB, 0.05f);
             }
         }
 
