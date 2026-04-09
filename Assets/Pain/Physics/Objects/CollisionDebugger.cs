@@ -1,7 +1,6 @@
 using System.Linq;
 using Pain.Physics.Core;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Pain.Physics.Objects
 {
@@ -9,29 +8,11 @@ namespace Pain.Physics.Objects
     {
         [SerializeField] private PainCollider collA;
         [SerializeField] private PainCollider collB;
-        [SerializeField] private InputActionReference m_nextAction;
 
         private PainlyPhysics m_physics;
         
         private ColliderData m_dataA;
         private ColliderData m_dataB;
-
-        private void OnEnable()
-        {
-            m_nextAction.action.Enable();
-            m_nextAction.action.performed += GoNext;
-        }
-
-        private void OnDisable()
-        {
-            m_nextAction.action.Disable();
-            m_nextAction.action.performed -= GoNext;
-        }
-
-        private void GoNext(InputAction.CallbackContext _)
-        {
-            
-        }
 
         private void OnDrawGizmos()
         {
@@ -48,49 +29,39 @@ namespace Pain.Physics.Objects
 
             for (int i = 0; i < normalsAll.Length; i++)
             {
-                PhysVector2 normal = normalsAll[0];
+                PhysVector2 normal = normalsAll[i];
                 Debug.DrawRay(Vector3.zero, normal, Color.blue);
                 
                 // SAT (separating-axis theorem)
                 PhysVector2 axisDir = new PhysVector2(normal.y, -normal.x).normalized;
-                Debug.DrawRay(normal, axisDir * 100f, Color.red);
-                Debug.DrawRay(normal, axisDir * -100f, Color.red);
 
+                ProjectPoints(dataA.Verts, axisDir, out float minA, out float maxA);
+                ProjectPoints(dataB.Verts, axisDir, out float minB, out float maxB);
+                
                 Gizmos.color = Color.yellow;
-
-                float[] pointsA = new float[dataA.Verts.Length];
-                for(int j = 0; j < pointsA.Length; j++)
-                {
-                    float pointAlongAxis = dataA.Verts[j] * axisDir;
-                    pointsA[j] = pointAlongAxis;   
-                }
-
-                PhysVector2 minPointA = axisDir * pointsA.Min();
-                PhysVector2 maxPointA = axisDir * pointsA.Max();
-                
-                Gizmos.DrawWireSphere(minPointA, 0.05f);
-                Gizmos.DrawWireSphere(maxPointA, 0.05f);
-                
+                Gizmos.DrawWireSphere(axisDir * minA, 0.05f);
+                Gizmos.DrawWireSphere(axisDir * maxA, 0.05f);
                 
                 Gizmos.color = Color.brown;
-                float[] pointsB = new float[dataB.Verts.Length];
-                for(int j = 0; j < pointsB.Length; j++)
-                {
-                    float pointAlongAxis = dataB.Verts[j] * axisDir;
-                    pointsB[j] = pointAlongAxis;
-                }
+                Gizmos.DrawWireSphere(axisDir * minB, 0.05f);
+                Gizmos.DrawWireSphere(axisDir * maxB, 0.05f);
                 
-                PhysVector2 minPointB = axisDir * pointsB.Min();
-                PhysVector2 maxPointB = axisDir * pointsB.Max();
-                
-                Gizmos.DrawWireSphere(minPointB, 0.05f);
-                Gizmos.DrawWireSphere(maxPointB, 0.05f);
+                Debug.DrawRay(Vector3.zero, axisDir * 100f, Color.red);
+                Debug.DrawRay(Vector3.zero, axisDir * -100f, Color.red);
             }
         }
 
-        private PhysVector2 ProjectToLine(PhysVector2 point, PhysVector2 through, PhysVector2 dir)
+        private void ProjectPoints(PhysVector2[] verts, PhysVector2 axisDir, out float min, out float max)
         {
-            return through + (point - through) * dir / (dir * dir) * dir;
+            float[] points = new float[verts.Length];
+            for(int i = 0; i < points.Length; i++)
+            {
+                float pointAlongAxis = verts[i] * axisDir;
+                points[i] = pointAlongAxis;
+            }
+
+            min = points.Min();
+            max = points.Max();
         }
 
         private void OnValidate()
