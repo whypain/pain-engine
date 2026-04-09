@@ -9,6 +9,9 @@ namespace Pain.Physics.Objects
         [SerializeField] private PainCollider collA;
         [SerializeField] private PainCollider collB;
 
+        [SerializeField] private bool[] drawThings;
+        // [SerializeField] private bool m_deepLog;
+
         private PainlyPhysics m_physics;
         
         private ColliderData m_dataA;
@@ -17,8 +20,21 @@ namespace Pain.Physics.Objects
         private void OnDrawGizmos()
         {
             if (collA == null || collB == null) return;
-            ColliderData dataA = collA.Data;
-            ColliderData dataB = collB.Data;
+
+            if (CollisionCheck(collA.Data, collB.Data))
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(Vector3.zero, 0.5f);
+                return;
+            }
+            
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(Vector3.zero, 0.5f);
+        }
+
+        private bool CollisionCheck(ColliderData dataA, ColliderData dataB)
+        {
+            bool isColliding = true;
             
             PhysVector2[] normalsA = PainColliderHelper.GetNormalsPolygon(dataA);
             PhysVector2[] normalsB = PainColliderHelper.GetNormalsPolygon(dataB);
@@ -30,25 +46,41 @@ namespace Pain.Physics.Objects
             for (int i = 0; i < normalsAll.Length; i++)
             {
                 PhysVector2 normal = normalsAll[i];
-                Debug.DrawRay(Vector3.zero, normal, Color.blue);
                 
                 // SAT (separating-axis theorem)
-                PhysVector2 axisDir = new PhysVector2(normal.y, -normal.x).normalized;
+                PhysVector2 axisDir = normal;
 
                 ProjectPoints(dataA.Verts, axisDir, out float minA, out float maxA);
                 ProjectPoints(dataB.Verts, axisDir, out float minB, out float maxB);
                 
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(axisDir * minA, 0.05f);
-                Gizmos.DrawWireSphere(axisDir * maxA, 0.05f);
-                
-                Gizmos.color = Color.brown;
-                Gizmos.DrawWireSphere(axisDir * minB, 0.05f);
-                Gizmos.DrawWireSphere(axisDir * maxB, 0.05f);
-                
-                Debug.DrawRay(Vector3.zero, axisDir * 100f, Color.red);
-                Debug.DrawRay(Vector3.zero, axisDir * -100f, Color.red);
+                // if (m_deepLog) Debug.Log($"A: ({minA}, {maxA}) | B: ({minB}, {maxB})");
+
+                if (drawThings[i])
+                {
+                    Debug.DrawRay(Vector3.zero, normal, Color.blue);
+                    DrawSomething(axisDir, minA, maxA, minB, maxB);
+                }
+                if (maxA < minB || maxB < minA)
+                {
+                    isColliding = false;
+                }
             }
+                
+            return isColliding;
+        }
+
+        private void DrawSomething(PhysVector2 axisDir, float minA, float maxA, float minB, float maxB)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(axisDir * minA, 0.05f);
+            Gizmos.DrawWireSphere(axisDir * maxA, 0.05f);
+            
+            Gizmos.color = Color.brown;
+            Gizmos.DrawWireSphere(axisDir * minB, 0.05f);
+            Gizmos.DrawWireSphere(axisDir * maxB, 0.05f);
+            
+            Debug.DrawRay(Vector3.zero, axisDir * 100f, Color.red);
+            Debug.DrawRay(Vector3.zero, axisDir * -100f, Color.red);
         }
 
         private void ProjectPoints(PhysVector2[] verts, PhysVector2 axisDir, out float min, out float max)
